@@ -12,10 +12,11 @@ public class Program
 {
     public static void Main(string[] args)
     {
+
         var logFilePath = (Debugger.IsAttached)
             ? "C:\\Temp\\TextToXml\\logs\\textToXml_log_DEV-.log"
             : "C:\\Temp\\TextToXml\\logs\\textToXml_log.log";
-       
+
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
@@ -23,6 +24,11 @@ public class Program
             .WriteTo.Console()
             .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
             .CreateLogger();
+        
+        Log.Logger.Information(Debugger.IsAttached 
+                ? "You are in Debugmode {InDebug}" 
+                : "You are in Debug mode {NotInDebug}",
+            Debugger.IsAttached);
 
         Log.Logger.Information("Logfile path is {LogFilePath}", logFilePath);
 
