@@ -1,5 +1,7 @@
 using TextToXmlService.Helpers;
 using TextToXmlService.Services;
+using Serilog;
+using Serilog.Events;
 
 namespace TextToXmlService;
 
@@ -7,6 +9,12 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateLogger();
         CreateHostBuilder(args).Build().Run();
     }
 
@@ -15,7 +23,7 @@ public class Program
         return Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                
+
                 OptionsConfigurationsHelper.Configure(hostContext, services);
 
                 DependencyInjectionsHelper.Configure(services);
@@ -23,8 +31,9 @@ public class Program
 
                 QuartzServiceConfigurationsHelper.Configure(hostContext, services);
 
-            });
+            })
+            .UseSerilog();
     }
 
-   
+
 }

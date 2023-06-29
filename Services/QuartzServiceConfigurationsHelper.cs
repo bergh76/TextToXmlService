@@ -9,7 +9,7 @@ public static class QuartzServiceConfigurationsHelper
         // Add the required Quartz.NET services
         services.AddQuartz(q =>
         {
-            // Use a Scoped container to create jobs. I'll touch on this later
+            // Use a Scoped container to create jobs.
             q.UseMicrosoftDependencyInjectionJobFactory();
 
 

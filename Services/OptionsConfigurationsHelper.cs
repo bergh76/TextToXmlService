@@ -15,5 +15,6 @@ public static class OptionsConfigurationsHelper
 
         // Set up FilePathOptions
         services.Configure<FilePathOptions>(configurationRoot.GetSection(nameof(FilePathOptions)));
+        
     }
 }
