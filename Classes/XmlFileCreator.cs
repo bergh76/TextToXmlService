@@ -22,6 +22,12 @@ public class XmlFileCreator : IXmlFileCreator
         _logger.LogInformation("Start creating XML");
         var inputPath = _filePathOptions.Input;
 
+        if (inputPath == null)
+        {
+            _logger.LogInformation("Input path from appsettings.json is empty {Inputpath}", inputPath);
+            return;
+        }
+
         var fileNames = Directory.GetFiles(inputPath);
 
         if (!fileNames.Any())
@@ -30,8 +36,16 @@ public class XmlFileCreator : IXmlFileCreator
         foreach (var fileName in fileNames)
         {
             _logger.LogInformation("Handle File: {FileName}", fileName);
+
             var filePath = Path.Combine(inputPath, fileName);
             var xmlFileName = $"{Path.GetFileNameWithoutExtension(filePath)}_{DateTime.Today:yyyy_MM_dd}.xml";
+            if (_filePathOptions.Output == null)
+            {
+                _logger.LogInformation("Output path from appsettings.json is empty {_filePathOptions.Output}", inputPath);
+
+                return;
+            }
+
             var xmlFilePath = Path.Combine(_filePathOptions.Output, xmlFileName);
             var lines = File.ReadAllLines(filePath);
 
@@ -40,110 +54,111 @@ public class XmlFileCreator : IXmlFileCreator
             people.Person = new List<Person>();
             _logger.LogInformation("Instantiate new Person {People}", people);
 
-            // Initialize variables to hold person and family information
-            Person? currentPerson = null;
-            Family? currentFamily = null;
+            // Initialize person and family
+            Person? newPerson = null;
+            Family? newFamily = null;
 
-            // Iterate over lines and create People, Person, and Family objects
+            
             foreach (var line in lines)
             {
-                var parts = line.Split('|');
-                var rowType = parts[0];
+                var lineParts = line.Split('|');
+                var rowType = lineParts[0];
 
                 switch (rowType)
                 {
                     case "P":
-                        currentPerson = new Person();
-                        currentPerson.Firstname = parts.Length > 1
-                            ? parts[1].Trim()
+                        newPerson = new Person();
+                        newPerson.Firstname = lineParts.Length > 1
+                            ? lineParts[1].Trim()
                             : null;
-                        currentPerson.Lastname = parts.Length > 2
-                            ? parts[2].Trim()
+                        newPerson.Lastname = lineParts.Length > 2
+                            ? lineParts[2].Trim()
                             : null;
-                        currentPerson.Address = new Address();
-                        currentPerson.Phone = new Phone();
-                        currentPerson.Family = new List<Family>();
-                        _logger.LogInformation("Instantiate new Person {CurrentPerson}", currentPerson);
-                        currentFamily = null;
-                        people.Person.Add(currentPerson);
+                        newPerson.Address = new Address();
+                        newPerson.Phone = new Phone();
+                        newPerson.Family = new List<Family>();
+                        _logger.LogInformation("Instantiate new Person {CurrentPerson}", newPerson);
+                        newFamily = null;
+                        people.Person.Add(newPerson);
 
                         break;
                     case "T":
-                        if (currentFamily == null)
+                        if (newFamily == null)
                         {
-                            if (currentPerson is { Phone: not null })
+                            if (newPerson is { Phone: not null })
                             {
-                                currentPerson.Phone.Mobile = parts.Length > 1
-                                    ? parts[1].Trim()
+                                newPerson.Phone.Mobile = lineParts.Length > 1
+                                    ? lineParts[1].Trim()
                                     : null;
-                                currentPerson.Phone.Landline = parts.Length > 2
-                                    ? parts[2].Trim()
+                                newPerson.Phone.Landline = lineParts.Length > 2
+                                    ? lineParts[2].Trim()
                                     : null;
                             }
                         }
                         else
                         {
-                            if (currentFamily.Phone != null)
+                            if (newFamily.Phone != null)
                             {
-                                currentFamily.Phone.Mobile = parts.Length > 1
-                                    ? parts[1].Trim()
+                                newFamily.Phone.Mobile = lineParts.Length > 1
+                                    ? lineParts[1].Trim()
                                     : null;
-                                currentFamily.Phone.Landline = parts.Length > 2
-                                    ? parts[2].Trim()
+                                newFamily.Phone.Landline = lineParts.Length > 2
+                                    ? lineParts[2].Trim()
                                     : null;
                             }
                         }
 
                         break;
                     case "A":
-                        if (currentFamily == null)
+                        if (newFamily == null)
                         {
-                            if (currentPerson is { Address: not null })
+                            if (newPerson is { Address: not null })
                             {
-                                currentPerson.Address.Street = parts.Length > 1
-                                    ? parts[1].Trim()
+                                newPerson.Address.Street = lineParts.Length > 1
+                                    ? lineParts[1].Trim()
                                     : null;
-                                currentPerson.Address.City = parts.Length > 2
-                                    ? parts[2].Trim()
+                                newPerson.Address.City = lineParts.Length > 2
+                                    ? lineParts[2].Trim()
                                     : null;
-                                currentPerson.Address.Zipcode = parts.Length > 3
-                                    ? parts[3].Trim()
+                                newPerson.Address.Zipcode = lineParts.Length > 3
+                                    ? lineParts[3].Trim()
                                     : null;
                             }
                         }
                         else
                         {
-                            if (currentFamily.Address != null)
+                            if (newFamily.Address != null)
                             {
-                                currentFamily.Address.Street = parts.Length > 1
-                                    ? parts[1].Trim()
+                                newFamily.Address.Street = lineParts.Length > 1
+                                    ? lineParts[1].Trim()
                                     : null;
-                                currentFamily.Address.City = parts.Length > 2
-                                    ? parts[2].Trim()
+                                newFamily.Address.City = lineParts.Length > 2
+                                    ? lineParts[2].Trim()
                                     : null;
-                                currentFamily.Address.Zipcode = parts.Length > 3
-                                    ? parts[3].Trim()
+                                newFamily.Address.Zipcode = lineParts.Length > 3
+                                    ? lineParts[3].Trim()
                                     : null;
                             }
                         }
 
                         break;
                     case "F":
-                        currentFamily = new Family();
-                        currentFamily.Name = parts.Length > 1
-                            ? parts[1].Trim()
+                        newFamily = new Family();
+                        newFamily.Name = lineParts.Length > 1
+                            ? lineParts[1].Trim()
                             : null;
-                        currentFamily.Born = parts.Length > 2
-                            ? parts[2].Trim()
+                        newFamily.Born = lineParts.Length > 2
+                            ? lineParts[2].Trim()
                             : null;
-                        currentFamily.Address = new Address();
-                        currentFamily.Phone = new Phone();
-                        currentPerson?.Family.Add(currentFamily);
+                        newFamily.Address = new Address();
+                        newFamily.Phone = new Phone();
+                        newPerson?.Family.Add(newFamily);
                         break;
                 }
             }
 
             _logger.LogInformation("People as collection {People}", people.Person);
+
             // Serialize the People object to XML
             var serializer = _stringSerializer.Serialize<People>(people);
             using (var stream = new StreamWriter(xmlFilePath))
