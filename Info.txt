@@ -1,16 +1,18 @@
-This worker takes a file from a configuerd path in appsetting.json and converts the content to 
+This worker takes a file from a configured path in appsetting.json and converts the content to 
 an XML-file and writes to the output path configured in appsetting.json.
-A test file is provided within in this project and is located in the folder Test
+A test file is provided within this project and is located in the folder Test
 
  "FilePathOptions": {
     "Input": "C:\\Temp\\TextToXml\\input\\",
     "Output": "C:\\Temp\\TextToXml\\output\\"
   },
 
-  to run this worker start the debug.
-  This worker is built around Quartz and i set to run on time, cron-job.
+
+  This worker is built around Quartz and is set to run on time, cron-job.
   The time to run is default set to every whole minute and the cron-job is configured in appsettings.json
 
   "Quartz": {
     "TextFileToXmlJob": "0 0/1 * * * ?"
   }
+
+To run this worker start the project in debug.
