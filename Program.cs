@@ -26,7 +26,7 @@ public class Program
             .CreateLogger();
         
         Log.Logger.Information(Debugger.IsAttached 
-                ? "You are in Debugmode {InDebug}" 
+                ? "You are in Debug mode {InDebug}" 
                 : "You are in Debug mode {NotInDebug}",
             Debugger.IsAttached);
 
