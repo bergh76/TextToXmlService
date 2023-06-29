@@ -1,0 +1,21 @@
+P|Victoria|Bernadotte
+T|070-0101010|0459-123456
+A|Haga Slott|Stockholm|101
+F|Estelle|2012
+A|Solliden|Öland|10002
+F|Oscar|2016
+T|0702-020202|02-202020
+P|Joe|Biden
+T||555-12345
+A|White House|Washington, D.C
+P|Anne|Wittinger
+T|321-654789|555-12345
+A|Green House|Alaska, AL
+F|Johnny|201
+A|Green House|Alaska, AL
+F|Julia|2003
+T|321-963258|555-12345
+A|Green House|Alaska, AL
+P|Billy|Joel
+T|321-12345
+A|Malibu|Los Angeles, CA |999
