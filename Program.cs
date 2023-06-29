@@ -1,7 +1,10 @@
+using System.Diagnostics;
 using TextToXmlService.Helpers;
 using TextToXmlService.Services;
 using Serilog;
 using Serilog.Events;
+using Serilog.Formatting.Compact;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace TextToXmlService;
 
@@ -9,12 +12,20 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        var logFilePath = (Debugger.IsAttached)
+            ? "C:\\Temp\\TextToXml\\logs\\textToXml_log_DEV-.log"
+            : "C:\\Temp\\TextToXml\\logs\\textToXml_log.log";
+       
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .WriteTo.Console()
+            .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
             .CreateLogger();
+
+        Log.Logger.Information("Logfile path is {LogFilePath}", logFilePath);
+
         CreateHostBuilder(args).Build().Run();
     }
 

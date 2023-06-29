@@ -20,8 +20,8 @@ public class XmlFileCreator : IXmlFileCreator
     public void WriteXmlFile()
     {
         _logger.LogInformation("Start creating XML");
-        var inputPath = _filePathOptions.Input;
 
+        var inputPath = _filePathOptions.Input;
         if (inputPath == null)
         {
             _logger.LogInformation("Input path from appsettings.json is empty {Inputpath}", inputPath);
@@ -29,7 +29,6 @@ public class XmlFileCreator : IXmlFileCreator
         }
 
         var fileNames = Directory.GetFiles(inputPath);
-
         if (!fileNames.Any())
             _logger.LogInformation("No file to handle....");
 
@@ -52,13 +51,12 @@ public class XmlFileCreator : IXmlFileCreator
             // Create the People object
             var people = new People();
             people.Person = new List<Person>();
-            _logger.LogInformation("Instantiate new Person {People}", people);
+            _logger.LogInformation("Instantiate new Person {@People}", people);
 
             // Initialize person and family
             Person? newPerson = null;
             Family? newFamily = null;
 
-            
             foreach (var line in lines)
             {
                 var lineParts = line.Split('|');
@@ -68,16 +66,14 @@ public class XmlFileCreator : IXmlFileCreator
                 {
                     case "P":
                         newPerson = new Person();
-                        newPerson.Firstname = lineParts.Length > 1
-                            ? lineParts[1].Trim()
-                            : null;
-                        newPerson.Lastname = lineParts.Length > 2
-                            ? lineParts[2].Trim()
-                            : null;
+                        newPerson.Firstname = lineParts.Length > 1 ? lineParts[1].Trim() : null;
+                        newPerson.Lastname = lineParts.Length > 2 ? lineParts[2].Trim() : null;
                         newPerson.Address = new Address();
                         newPerson.Phone = new Phone();
                         newPerson.Family = new List<Family>();
-                        _logger.LogInformation("Instantiate new Person {CurrentPerson}", newPerson);
+
+                        _logger.LogInformation("Adding {@Person} to {@People}", newPerson, people);
+
                         newFamily = null;
                         people.Person.Add(newPerson);
 
@@ -87,77 +83,57 @@ public class XmlFileCreator : IXmlFileCreator
                         {
                             if (newPerson is { Phone: not null })
                             {
-                                newPerson.Phone.Mobile = lineParts.Length > 1
-                                    ? lineParts[1].Trim()
-                                    : null;
-                                newPerson.Phone.Landline = lineParts.Length > 2
-                                    ? lineParts[2].Trim()
-                                    : null;
+                                _logger.LogInformation("Adding {@Phone} for {@Person}", newPerson.Phone, newPerson);
+                                newPerson.Phone.Mobile = lineParts.Length > 1 ? lineParts[1].Trim() : null;
+                                newPerson.Phone.Landline = lineParts.Length > 2 ? lineParts[2].Trim() : null;
                             }
                         }
                         else
                         {
                             if (newFamily.Phone != null)
                             {
-                                newFamily.Phone.Mobile = lineParts.Length > 1
-                                    ? lineParts[1].Trim()
-                                    : null;
-                                newFamily.Phone.Landline = lineParts.Length > 2
-                                    ? lineParts[2].Trim()
-                                    : null;
+                                _logger.LogInformation("Adding {@Phone} for {@Family}", newFamily.Phone, newFamily);
+                                newFamily.Phone.Mobile = lineParts.Length > 1 ? lineParts[1].Trim() : null;
+                                newFamily.Phone.Landline = lineParts.Length > 2 ? lineParts[2].Trim() : null;
                             }
                         }
-
                         break;
                     case "A":
                         if (newFamily == null)
                         {
                             if (newPerson is { Address: not null })
                             {
-                                newPerson.Address.Street = lineParts.Length > 1
-                                    ? lineParts[1].Trim()
-                                    : null;
-                                newPerson.Address.City = lineParts.Length > 2
-                                    ? lineParts[2].Trim()
-                                    : null;
-                                newPerson.Address.Zipcode = lineParts.Length > 3
-                                    ? lineParts[3].Trim()
-                                    : null;
+                                _logger.LogInformation("Adding {@Address} for {@Person}", newPerson.Address, newPerson);
+                                newPerson.Address.Street = lineParts.Length > 1 ? lineParts[1].Trim() : null;
+                                newPerson.Address.City = lineParts.Length > 2 ? lineParts[2].Trim() : null;
+                                newPerson.Address.Zipcode = lineParts.Length > 3 ? lineParts[3].Trim() : null;
                             }
                         }
                         else
                         {
                             if (newFamily.Address != null)
                             {
-                                newFamily.Address.Street = lineParts.Length > 1
-                                    ? lineParts[1].Trim()
-                                    : null;
-                                newFamily.Address.City = lineParts.Length > 2
-                                    ? lineParts[2].Trim()
-                                    : null;
-                                newFamily.Address.Zipcode = lineParts.Length > 3
-                                    ? lineParts[3].Trim()
-                                    : null;
+                                _logger.LogInformation("Adding {@Address} for {@Family}", newFamily.Address,newFamily);
+                                newFamily.Address.Street = lineParts.Length > 1 ? lineParts[1].Trim() : null;
+                                newFamily.Address.City = lineParts.Length > 2 ? lineParts[2].Trim() : null;
+                                newFamily.Address.Zipcode = lineParts.Length > 3 ? lineParts[3].Trim() : null;
                             }
                         }
-
                         break;
                     case "F":
                         newFamily = new Family();
-                        newFamily.Name = lineParts.Length > 1
-                            ? lineParts[1].Trim()
-                            : null;
-                        newFamily.Born = lineParts.Length > 2
-                            ? lineParts[2].Trim()
-                            : null;
+                        _logger.LogInformation("Adding new {@Family}", newFamily);
+                        newFamily.Name = lineParts.Length > 1 ? lineParts[1].Trim() : null;
+                        newFamily.Born = lineParts.Length > 2 ? lineParts[2].Trim() : null;
                         newFamily.Address = new Address();
                         newFamily.Phone = new Phone();
                         newPerson?.Family.Add(newFamily);
+                        _logger.LogInformation("Adding new {@Family} to {@Person}", newFamily, newPerson);
                         break;
                 }
             }
 
-            _logger.LogInformation("People as collection {People}", people.Person);
+            _logger.LogInformation("People as collection {@People}", people.Person);
 
             // Serialize the People object to XML
             var serializer = _stringSerializer.Serialize<People>(people);
