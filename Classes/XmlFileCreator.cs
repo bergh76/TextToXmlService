@@ -152,7 +152,7 @@ public class XmlFileCreator : IXmlFileCreator
                 stream.Write(serializer);
             }
 
-            _logger.LogInformation("XML file created successfully. {FileName}", xmlFileName);
+            _logger.LogInformation("XML file created successfully. {FileName}", xmlFilePath);
         }
     }
 }
