@@ -10,4 +10,5 @@ public class FilePathOptions
 {
     public string? Input { get; set; }
     public string? Output { get; set; }
+    public string? Archive { get; set; }
 }

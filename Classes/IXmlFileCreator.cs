@@ -1,6 +1,8 @@
-﻿namespace TextToXmlService.Classes;
+﻿using TextToXmlService.Models;
+
+namespace TextToXmlService.Classes;
 
 public interface IXmlFileCreator
 {
-    void WriteXmlFile();
+    void WriteXmlFile(string fileName, People people);
 }

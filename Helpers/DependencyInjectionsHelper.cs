@@ -12,5 +12,6 @@ public static class DependencyInjectionsHelper
     {
         services.AddScoped<IStringSerializer, XmlSerializer>();
         services.AddScoped<IXmlFileCreator, XmlFileCreator>();
+        services.AddScoped<ITextFileHelper, TextFileHelper>();
     }
 }
