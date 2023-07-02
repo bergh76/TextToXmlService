@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextToXmlService.Models
+namespace TextToXmlService.Models;
+
+public class FilePathOptions
 {
-    public class FilePathOptions
-    {
-        public string? Input { get; set; }
-        public string? Output { get; set; }
-    }
+    public string? Input { get; set; }
+    public string? Output { get; set; }
+    public string? Archive { get; set; }
 }

@@ -1,14 +1,9 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-using System.Xml;
+﻿using System.Runtime.Serialization;
 
 namespace TextToXmlService.Classes;
 
 internal class XmlSerializer : IStringSerializer
 {
-
-
-
     /// <summary>
     /// Async - Deserialize string to object of type T
     /// </summary>
@@ -20,10 +15,8 @@ internal class XmlSerializer : IStringSerializer
         try
         {
             var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
-
             using var stream = new StringReader(text);
             var result = Task.FromResult((T)serializer.Deserialize(stream));
-
             return result;
         }
         catch (Exception ex)
@@ -43,13 +36,9 @@ internal class XmlSerializer : IStringSerializer
         try
         {
             var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
-
             using var stream = new StringReader(text);
-
             var result = (T)serializer.Deserialize(stream);
-
             return result;
-
         }
 
         catch (Exception ex)
@@ -59,7 +48,7 @@ internal class XmlSerializer : IStringSerializer
     }
 
     /// <summary>
-    /// Async - Serialize an object  of type T to Utf8 stream
+    /// Async - Serialize an object of type T to Utf8 stream
     /// </summary>
     /// <param name="data"></param>
     /// <returns><c>stream</c> as utf8.</returns>
@@ -68,10 +57,8 @@ internal class XmlSerializer : IStringSerializer
         try
         {
             var serializer = new System.Xml.Serialization.XmlSerializer(data.GetType());
-
             await using var stream = new Utf8StringWriter();
             serializer.Serialize(stream, data);
-
             return stream.ToString();
         }
         catch (Exception ex)
@@ -90,10 +77,8 @@ internal class XmlSerializer : IStringSerializer
         try
         {
             var serializer = new System.Xml.Serialization.XmlSerializer(data.GetType());
-
             using var stream = new Utf8StringWriter();
             serializer.Serialize(stream, data);
-
             return stream.ToString();
         }
 

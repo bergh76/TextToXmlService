@@ -1,10 +1,8 @@
+using Serilog;
+using Serilog.Events;
 using System.Diagnostics;
 using TextToXmlService.Helpers;
 using TextToXmlService.Services;
-using Serilog;
-using Serilog.Events;
-using Serilog.Formatting.Compact;
-using Serilog.Sinks.SystemConsole.Themes;
 
 namespace TextToXmlService;
 
@@ -12,8 +10,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-
-        var logFilePath = (Debugger.IsAttached)
+        var logFilePath = Debugger.IsAttached
             ? "C:\\Temp\\TextToXml\\logs\\textToXml_log_DEV-.log"
             : "C:\\Temp\\TextToXml\\logs\\textToXml_log.log";
 
@@ -24,9 +21,9 @@ public class Program
             .WriteTo.Console()
             .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
             .CreateLogger();
-        
-        Log.Logger.Information(Debugger.IsAttached 
-                ? "You are in Debug mode {InDebug}" 
+
+        Log.Logger.Information(Debugger.IsAttached
+                ? "You are in Debug mode {InDebug}"
                 : "You are in Debug mode {NotInDebug}",
             Debugger.IsAttached);
 
@@ -40,17 +37,13 @@ public class Program
         return Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-
                 OptionsConfigurationsHelper.Configure(hostContext, services);
 
                 DependencyInjectionsHelper.Configure(services);
                 //services.AddHostedService<Worker>();
 
                 QuartzServiceConfigurationsHelper.Configure(hostContext, services);
-
             })
             .UseSerilog();
     }
-
-
 }
