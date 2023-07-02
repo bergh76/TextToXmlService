@@ -4,7 +4,8 @@ A test file is provided within this project and is located in the folder Test
 
  "FilePathOptions": {
     "Input": "C:\\Temp\\TextToXml\\input\\",
-    "Output": "C:\\Temp\\TextToXml\\output\\"
+    "Output": "C:\\Temp\\TextToXml\\output\\",
+    "Archive": "C:\\Temp\\TextToXml\\archive\\"
   },
 
 
