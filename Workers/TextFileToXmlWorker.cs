@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.Options;
-using Quartz;
+﻿using Quartz;
 using TextToXmlService.Classes;
-using TextToXmlService.Models;
 
 namespace TextToXmlService.Workers;
 
@@ -21,7 +19,7 @@ public class TextFileToXmlJob : IJob
     public Task Execute(IJobExecutionContext context)
     {
         _logger.LogInformation("Begin Work!");
-
+        var files
         _fileCreator.WriteXmlFile();
 
         return Task.CompletedTask;

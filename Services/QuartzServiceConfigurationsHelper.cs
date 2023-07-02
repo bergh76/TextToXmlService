@@ -1,6 +1,7 @@
 using Quartz;
-using TextToXmlService.Services;
 using TextToXmlService.Workers;
+
+namespace TextToXmlService.Services;
 
 public static class QuartzServiceConfigurationsHelper
 {
@@ -12,18 +13,14 @@ public static class QuartzServiceConfigurationsHelper
             // Use a Scoped container to create jobs.
             q.UseMicrosoftDependencyInjectionJobFactory();
 
-
             // Register the job, loading the schedule from configuration
             q.AddJobAndTrigger<TextFileToXmlJob>(hostContext.Configuration);
-
 
         });
 
         // Add the Quartz.NET hosted service
-
         services.AddQuartzHostedService(
             q => q.WaitForJobsToComplete = true);
-
         // other config
     }
 }

@@ -6,9 +6,6 @@ namespace TextToXmlService.Classes;
 
 internal class XmlSerializer : IStringSerializer
 {
-
-
-
     /// <summary>
     /// Async - Deserialize string to object of type T
     /// </summary>
@@ -49,7 +46,6 @@ internal class XmlSerializer : IStringSerializer
             var result = (T)serializer.Deserialize(stream);
 
             return result;
-
         }
 
         catch (Exception ex)
@@ -59,7 +55,7 @@ internal class XmlSerializer : IStringSerializer
     }
 
     /// <summary>
-    /// Async - Serialize an object  of type T to Utf8 stream
+    /// Async - Serialize an object of type T to Utf8 stream
     /// </summary>
     /// <param name="data"></param>
     /// <returns><c>stream</c> as utf8.</returns>
