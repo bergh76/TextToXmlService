@@ -134,9 +134,12 @@ public class TextFileHelper : ITextFileHelper
         _logger.LogInformation("Moving file {inputPath}", inputPath);
         if (File.Exists(archivePath))
         {
+            _logger.LogInformation("Found file with same name {FileName} in archive folder.",file);
             file = Path.GetFileNameWithoutExtension(archivePath);
             var fileExt = Path.GetExtension(archivePath);
-            archivePath = Path.Combine(_filePathOptions.Archive, $"{file}_{Path.GetRandomFileName()}{fileExt}");
+            var newFilename = $"{file}_{Path.GetRandomFileName()}{fileExt}";
+            _logger.LogInformation("Rename file {Filename} to {NewFileName}.", file, newFilename);
+            archivePath = Path.Combine(_filePathOptions.Archive,newFilename);
         }
         File.Move(inputPath, archivePath);
 
